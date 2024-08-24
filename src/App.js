@@ -8,41 +8,92 @@ function App() {
   const [details, setDetails] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [error, setError] = useState('');
+  const [fillDetails, setFillDetails] = useState(false);
 
 
-  const handleSubmit = (e) => {
+  const fetchDetails = async (e) => {
+    e.preventDefault();
+    var fetchedData = [];
+    const response = await fetch("http://localhost:8080/api/user", {
+      method: 'GET',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    const data = await response.json();
+    console.log(data.data);
+    if (data.data.length === 0){
+      alert("No data!")
+    }
+    else setDetails(data.data);
+  };
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !designation) {
+      setFillDetails(true);
       setError('Details Daal dijiyee, please :)');
       return;
     }
 
     if (editIndex !== null) {
       // Update existing entry
+      const person = {"id" : details[editIndex].id}
+      const response = await fetch("http://localhost:8080/api/user/" + details[editIndex].id , {
+        method: 'PUT',
+        body: JSON.stringify(person),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      });
+      const data = await response.json();
+      const id = details[editIndex].id
       const updatedDetails = details.map((detail, index) =>
-        index === editIndex ? { name, designation } : detail
+        index === editIndex ? { id ,name, designation } : detail
       );
       setDetails(updatedDetails);
       setEditIndex(null);
-    } else {
+    } 
+    else {
       // Add new entry
-      setDetails([{ name, designation}, ...details]);
+      const person = {"name" : name, "designation" : designation}
+      const response = await fetch("http://localhost:8080/api/user", {
+        method: 'POST',
+        body: JSON.stringify(person),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      });
+      const data = await response.json();
+      // console.log(data.data.id);
+      setDetails([{ "id" : data.data.id , "name" : data.data.name, "designation" : data.data.designation}, ...details]);
     }
 
     setName('');
     setDesignation('');
+    setFillDetails(false);
   };
   
   const handleEdit = (index) => {
     const detail = details[index];
     setName(detail.name);
-    setDesignation(detail.occupation);
+    setDesignation(detail.designation);
     setEditIndex(index);
   };
   
-  const handleDelete = (index) => {
-    const updatedDetailsList = details.filter((_, i) => i !== index);
-    setDetails(updatedDetailsList);
+  const handleDelete = async (index) => {
+    const person = {"id" : details[index].id}
+      const response = await fetch("http://localhost:8080/api/user/" + details[index].id , {
+        method: 'DELETE',
+        body: JSON.stringify(person),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      });
+      const data = await response.json();
+      const updatedDetailsList = details.filter((_, i) => i !== index);
+      setDetails(updatedDetailsList);
   };
 
   return (
@@ -64,12 +115,15 @@ function App() {
         <button type="submit">{editIndex !== null ? 'Update' : 'Submit'}</button>
         </form>
 
-        {error && <p style={{ fontWeight: "bolder", color: '#fa5407' }}>{error}</p>}
+        {error && fillDetails && <p style={{ fontWeight: "bolder", color: '#fa5407' }}>{error}</p>}
+
+        <button type="submit"  onClick = {fetchDetails} className='fetchButton'> Fetch all Data</button>
 
       {details.length > 0 && (
         <table className="details-table">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Name</th>
               <th>Designation</th>
               <th>Actions</th>
@@ -78,6 +132,7 @@ function App() {
           <tbody>
             {details.map((item, index) => (
               <tr key={index}>
+                <td>{item.id}</td>
                 <td>{item.name}</td>
                 <td>{item.designation}</td>
                 <td>
