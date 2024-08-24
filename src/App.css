@@ -18,6 +18,8 @@ button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  margin-inline: 2px;
+  border-radius: 10px;
 }
 
 .details {
@@ -25,7 +27,7 @@ button {
 }
 
 .details-table {
-  margin: 20px auto;
+  margin: 60px auto;
   width: 50%;
   border-collapse: collapse;
 }
@@ -33,4 +35,5 @@ button {
 .details-table th, .details-table td {
   border: 1px solid #ddd;
   padding: 8px;
+  /* margin: 10px; */
 }
