@@ -10,11 +10,12 @@ function App() {
   const [error, setError] = useState('');
   const [fillDetails, setFillDetails] = useState(false);
 
+  const baseDir = "http://34.131.126.241:3000"
 
   const fetchDetails = async (e) => {
     e.preventDefault();
     var fetchedData = [];
-    const response = await fetch("http://10.0.1.2:8080/api/user", {
+    const response = await fetch( baseDir + "/api/user", {
       method: 'GET',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -40,7 +41,7 @@ function App() {
     if (editIndex !== null) {
       // Update existing entry
       const person = {"id" : details[editIndex].id, name, designation}
-      const response = await fetch("http://10.0.1.2:8080/api/user/" + details[editIndex].id , {
+      const response = await fetch( baseDir + "/api/user/" + details[editIndex].id , {
         method: 'PUT',
         body: JSON.stringify(person),
         headers: {
@@ -58,7 +59,7 @@ function App() {
     else {
       // Add new entry
       const person = {"name" : name, "designation" : designation}
-      const response = await fetch("http://10.0.1.2:8080/api/user", {
+      const response = await fetch( baseDir + "/api/user", {
         method: 'POST',
         body: JSON.stringify(person),
         headers: {
@@ -84,7 +85,7 @@ function App() {
   
   const handleDelete = async (index) => {
     const person = {"id" : details[index].id}
-      const response = await fetch("http://10.0.1.2:8080/api/user/" + details[index].id , {
+      const response = await fetch( baseDir + "/api/user/" + details[index].id , {
         method: 'DELETE',
         body: JSON.stringify(person),
         headers: {
