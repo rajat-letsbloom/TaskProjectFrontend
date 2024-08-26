@@ -10,11 +10,10 @@ function App() {
   const [error, setError] = useState('');
   const [fillDetails, setFillDetails] = useState(false);
 
-  const baseDir = process.env.BASE_DIR;
+  const baseDir = process.env.REACT_APP_BASE_DIR;
 
   const fetchDetails = async (e) => {
     e.preventDefault();
-    var fetchedData = [];
     const response = await fetch( baseDir + "/api/user", {
       method: 'GET',
       headers: {
