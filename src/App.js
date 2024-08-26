@@ -10,7 +10,7 @@ function App() {
   const [error, setError] = useState('');
   const [fillDetails, setFillDetails] = useState(false);
 
-  const baseDir = "http://34.131.126.241:3000"
+  const baseDir = process.env.BASE_DIR;
 
   const fetchDetails = async (e) => {
     e.preventDefault();
@@ -40,7 +40,7 @@ function App() {
 
     if (editIndex !== null) {
       // Update existing entry
-      const person = {"id" : details[editIndex].id, name, designation}
+      const person = { name, designation}
       const response = await fetch( baseDir + "/api/user/" + details[editIndex].id , {
         method: 'PUT',
         body: JSON.stringify(person),
