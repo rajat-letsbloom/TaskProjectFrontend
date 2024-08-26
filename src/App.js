@@ -12,6 +12,7 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError('')
     if (!name || !designation) {
       setError('Details Daal dijiyee, please :)');
       return;
@@ -32,7 +33,7 @@ function App() {
     setName('');
     setDesignation('');
   };
-  
+
   const handleEdit = (index) => {
     const detail = details[index];
     setName(detail.name);
