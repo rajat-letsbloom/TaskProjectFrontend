@@ -37,3 +37,7 @@ button {
   padding: 8px;
   /* margin: 10px; */
 }
+
+.fetchButton {
+  margin-top: 10px;
+}
